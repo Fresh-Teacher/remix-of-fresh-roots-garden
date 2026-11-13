@@ -833,3 +833,15 @@ a, button, [role="button"], summary, label { touch-action: manipulation; -webkit
 .library-install-control svg { animation: appbar-arrow-point 1.8s ease-in-out infinite; will-change: transform; }
 @keyframes appbar-arrow-point { 0%, 55%, 100% { transform: translateY(0); } 25% { transform: translateY(3px); } 40% { transform: translateY(-1px); } }
 @media (prefers-reduced-motion: reduce) { .library-install-control svg { animation: none; } }
+
+/* Search icon "looking around": small circular orbit, transform-only. */
+.library-search-control svg { animation: appbar-search-orbit 3s linear infinite; will-change: transform; }
+@keyframes appbar-search-orbit {
+  0%, 40%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(2px, -2px); }
+  60% { transform: translate(2px, 2px); }
+  70% { transform: translate(-2px, 2px); }
+  80% { transform: translate(-2px, -2px); }
+  90% { transform: translate(0, 0); }
+}
+@media (prefers-reduced-motion: reduce) { .library-search-control svg { animation: none; } }
