@@ -37,7 +37,7 @@ export function ShareMenuItems({ copied, copy, subject, introduction, message, l
   return <>
       <DropdownMenuItem onSelect={() => void copy()}>{copied ? <Check size={16} /> : <Link2 size={16} />} Copy message &amp; link</DropdownMenuItem>
       <DropdownMenuItem onSelect={() => open(`https://wa.me/?text=${enc(message())}`)}><WhatsAppIcon /> WhatsApp</DropdownMenuItem>
-      <DropdownMenuItem onSelect={() => { window.location.href = `mailto:?subject=${enc(title)}&body=${enc(message())}`; }}><GmailIcon /> Gmail / Email</DropdownMenuItem>
+      <DropdownMenuItem onSelect={() => { window.location.href = `mailto:?subject=${enc(subject)}&body=${enc(message())}`; }}><GmailIcon /> Gmail / Email</DropdownMenuItem>
       <DropdownMenuItem onSelect={() => open(`https://www.facebook.com/sharer/sharer.php?u=${enc(link())}`)}><FacebookIcon /> Facebook</DropdownMenuItem>
       <DropdownMenuItem onSelect={() => open(`https://x.com/intent/post?text=${enc(introduction)}&url=${enc(link())}`)}><XIcon /> X</DropdownMenuItem>
       <DropdownMenuItem onSelect={() => open(`https://t.me/share/url?url=${enc(link())}&text=${enc(introduction)}`)}><TelegramIcon /> Telegram</DropdownMenuItem>
