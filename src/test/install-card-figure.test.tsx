@@ -84,36 +84,25 @@ describe('Install card app download options', () => {
 });
 
 describe('Install card library sharing', () => {
-  it('shares the library homepage rather than the currently open document', async () => {
-    const share = vi.fn().mockResolvedValue(undefined);
-    vi.stubGlobal('navigator', { platform: navigator.platform, userAgent: navigator.userAgent, share });
-    location.pathname = '/doc/example';
+  const openMenu = () => {
+    openCard();
+    const trigger = screen.getByRole('button', { name: 'Share the Fresh Teacher’s Library' });
+    fireEvent.pointerDown(trigger, { button: 0, ctrlKey: false, pointerType: 'mouse' });
+    return screen.getByRole('menu', { name: 'Share Fresh Teacher’s Library' });
+  };
+  const intro = 'Hello, visit Fresh Teacher’s Library to access thousands of free educational materials like Lesson Notes, Schemes of Work, Past Papers, Holiday Packages and many other educational materials.\n\nFollow this link to visit it now:';
+
+  it('opens the same share options as the document page', () => {
+    openMenu();
+    for (const name of ['Copy message & link', 'WhatsApp', 'Gmail / Email', 'Facebook', 'X', 'Telegram']) expect(screen.getByRole('menuitem', { name })).toBeInTheDocument();
+  });
+
+  it('shares the library invitation with the homepage link on WhatsApp', () => {
+    const open = vi.spyOn(window, 'open').mockReturnValue(null);
     window.history.replaceState({}, '', '/doc/example');
-    openCard();
-    fireEvent.click(screen.getByRole('button', { name: 'Share the Fresh Teacher’s Library' }));
-    expect(share).toHaveBeenCalledWith({
-      title: 'Fresh Teacher’s Library',
-      text: 'Hello, I have discovered these useful teaching and learning resources from Fresh Teacher’s Library.\n\nFollow this link to check it out:',
-      url: `${window.location.origin}/`,
-    });
-  });
-
-  it('copies the library message and homepage link when native sharing is unavailable', async () => {
-    const writeText = vi.fn().mockResolvedValue(undefined);
-    vi.stubGlobal('navigator', { platform: navigator.platform, userAgent: navigator.userAgent, clipboard: { writeText } });
-    openCard();
-    fireEvent.click(screen.getByRole('button', { name: 'Share the Fresh Teacher’s Library' }));
-    await screen.findByRole('status');
-    expect(writeText).toHaveBeenCalledWith(`Hello, I have discovered these useful teaching and learning resources from Fresh Teacher’s Library.\n\nFollow this link to check it out:\n${window.location.origin}/`);
-  });
-
-  it('does not copy anything if the user cancels the share sheet', async () => {
-    const writeText = vi.fn();
-    const share = vi.fn().mockRejectedValue(new DOMException('Cancelled', 'AbortError'));
-    vi.stubGlobal('navigator', { platform: navigator.platform, userAgent: navigator.userAgent, share, clipboard: { writeText } });
-    openCard();
-    fireEvent.click(screen.getByRole('button', { name: 'Share the Fresh Teacher’s Library' }));
-    await share.mock.results[0]?.value.catch(() => undefined);
-    expect(writeText).not.toHaveBeenCalled();
+    openMenu();
+    fireEvent.click(screen.getByRole('menuitem', { name: 'WhatsApp' }));
+    const shared = new URL(String(open.mock.calls[0]?.[0]));
+    expect(shared.searchParams.get('text')).toBe(`${intro}\n${window.location.origin}/`);
   });
 });
