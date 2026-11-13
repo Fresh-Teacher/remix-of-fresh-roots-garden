@@ -5,6 +5,14 @@ import { resolve } from 'node:path';
 import { LibraryShell } from '@/components/library-shell';
 import { APP_APK_URL, APP_STORE_URL, PLAY_STORE_URL, LibraryShare } from '@/components/navigation/install-card';
 
+// jsdom ships neither PointerEvent nor the pointer-capture helpers Radix calls.
+const globals = globalThis as Record<string, unknown>;
+if (!('PointerEvent' in globals)) globals['PointerEvent'] = globals['MouseEvent'];
+Element.prototype.hasPointerCapture ??= () => false;
+Element.prototype.releasePointerCapture ??= () => {};
+Element.prototype.setPointerCapture ??= () => {};
+globalThis.ResizeObserver ??= class { observe() {} unobserve() {} disconnect() {} } as unknown as typeof ResizeObserver;
+
 const routerMock = vi.hoisted(() => ({ navigate: vi.fn(), history: { back: vi.fn() } }));
 const location = vi.hoisted(() => ({ pathname: '/' }));
 
