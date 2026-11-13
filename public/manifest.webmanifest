@@ -1,0 +1,38 @@
+{
+  "name": "Fresh App",
+  "short_name": "Fresh App",
+  "description": "Fresh Teacher's Platform — educational resource library for lesson notes, schemes of work and past papers.",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "lang": "en",
+  "categories": ["education", "books"],
+  "shortcuts": [
+    { "name": "Primary Five Lesson Notes", "short_name": "P5 Notes", "url": "/PrimaryFiveLessonNotes.html", "icons": [{ "src": "/__l5e/assets-v1/5a9ae0d4-199b-4767-a730-37332b1722e5/icon-192.png", "sizes": "192x192", "type": "image/png" }] },
+    { "name": "Baby Class Past Papers", "short_name": "Baby Papers", "url": "/BabyClassPastPapers.html", "icons": [{ "src": "/__l5e/assets-v1/5a9ae0d4-199b-4767-a730-37332b1722e5/icon-192.png", "sizes": "192x192", "type": "image/png" }] }
+  ],
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#1b2437",
+  "icons": [
+    {
+      "src": "/__l5e/assets-v1/5a9ae0d4-199b-4767-a730-37332b1722e5/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/__l5e/assets-v1/41ad7ee7-a9e2-4490-9be0-43eef370bd32/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/__l5e/assets-v1/4183e943-6f67-4d17-b74d-ce1f8b36008b/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
