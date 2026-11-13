@@ -75,7 +75,7 @@ describe('Document sharing destinations', () => {
     vi.stubGlobal('navigator', Object.create(navigator, { clipboard: { value: { writeText } } }));
     render(<DocumentShare item={item} />);
     press(trigger());
-    fireEvent.click(screen.getByRole('menuitem', { name: 'Copy message & link' }));
+    fireEvent.click(screen.getByRole('menuitem', { name: 'Share link' }));
     await waitFor(() => expect(writeText).toHaveBeenCalledWith(`${introduction}\n${detailUrl()}`));
     expect(writeText.mock.calls[0]?.[0]).not.toContain(item.pdfUrl);
   });

@@ -35,7 +35,7 @@ export function ShareMenuItems({ copied, copy, subject, introduction, message, l
   const open = (url: string) => window.open(url, '_blank', 'noopener,noreferrer');
   const enc = encodeURIComponent;
   return <>
-      <DropdownMenuItem onSelect={() => void copy()}>{copied ? <Check size={16} /> : <Link2 size={16} />} Copy message &amp; link</DropdownMenuItem>
+      <DropdownMenuItem onSelect={() => void copy()}>{copied ? <Check size={16} /> : <Link2 size={16} />} Share link</DropdownMenuItem>
       <DropdownMenuItem onSelect={() => open(`https://wa.me/?text=${enc(message())}`)}><WhatsAppIcon /> WhatsApp</DropdownMenuItem>
       <DropdownMenuItem onSelect={() => { window.location.href = `mailto:?subject=${enc(subject)}&body=${enc(message())}`; }}><GmailIcon /> Gmail / Email</DropdownMenuItem>
       <DropdownMenuItem onSelect={() => open(`https://www.facebook.com/sharer/sharer.php?u=${enc(link())}`)}><FacebookIcon /> Facebook</DropdownMenuItem>
@@ -73,7 +73,7 @@ export function DocumentShare({ item }: { item: ResourceRecord }) {
   const introduction = `Hello, I have discovered this useful resource from Fresh Teacher’s Library.\n\n${title}\n\nFollow this link to check it out:`;
   const message = () => `${introduction}\n${link()}`;
   const copy = async () => {
-    try { await navigator.clipboard.writeText(message()); setCopied(true); toast.success('Message and link copied'); window.setTimeout(() => setCopied(false), 2000); }
+    try { await navigator.clipboard.writeText(message()); setCopied(true); toast.success('Link copied'); window.setTimeout(() => setCopied(false), 2000); }
     catch { toast.error('Could not copy message and link'); }
   };
   return <DropdownMenu open={shareOpen} onOpenChange={chooseEntrance} modal={false}>
