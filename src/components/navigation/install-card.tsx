@@ -93,7 +93,7 @@ export const InstallCard = memo(function InstallCard({ open, onClose }: { open: 
 const LIBRARY_TITLE = 'Fresh Teacher’s Library';
 export const LIBRARY_SHARE_INTRODUCTION = 'Hello, visit Fresh Teacher’s Library to access thousands of free educational materials like Lesson Notes, Schemes of Work, Past Papers, Holiday Packages and many other educational materials.\n\nFollow this link to visit it now:';
 
-function LibraryShare() {
+export function LibraryShare() {
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const link = () => new URL('/', window.location.origin).href;

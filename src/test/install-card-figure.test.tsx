@@ -85,7 +85,7 @@ describe('Install card app download options', () => {
 
 describe('Install card library sharing', () => {
   const openMenu = async () => {
-    openCard();
+    render(<LibraryShare />);
     const trigger = screen.getByRole('button', { name: 'Share the Fresh Teacher’s Library' });
     fireEvent.pointerDown(trigger, { button: 0, ctrlKey: false, bubbles: true, cancelable: true });
     fireEvent.click(trigger, { button: 0, ctrlKey: false, bubbles: true, cancelable: true });
