@@ -216,3 +216,8 @@ body:has(.class-hub) b { font-weight: 500; }
 .class-hub #page-wrapper { color: var(--hub-link); }
 .class-hub .menu-skeleton__row { height: 48px; min-height: 48px; margin: 0; border-radius: 2.5px; }
 .class-hub .menu-skeleton__row::after { display: none; }
+
+/* NEW! badge blink: opacity-only so it stays cheap. */
+.class-resource-new > span { animation: resource-new-blink 1.2s steps(2, jump-none) infinite; }
+@keyframes resource-new-blink { 0% { opacity: 1; } 100% { opacity: .15; } }
+@media (prefers-reduced-motion: reduce) { .class-resource-new > span { animation: none; } }

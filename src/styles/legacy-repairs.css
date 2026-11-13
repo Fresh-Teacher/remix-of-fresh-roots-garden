@@ -79,3 +79,8 @@ body:has(.legacy-page.legacy-sidebar-hidden) #page-wrapper { margin-left: 0 !imp
 .legacy-selection #page-wrapper .tab-content { margin-top: 8px; }
 .legacy-selection #page-wrapper .tab-pane h1, .legacy-selection #page-wrapper .tab-pane h2, .legacy-selection #page-wrapper .tab-pane h3, .legacy-selection #page-wrapper .tab-pane h4, .legacy-selection #page-wrapper .tab-pane h5 { margin-top: 6px; margin-bottom: 8px; }
 .legacy-selection #page-wrapper > .container-fluid { padding-bottom: 6px; }
+
+/* NEW! badge blink: opacity-only so it stays cheap. */
+.class-resource-new > span { animation: resource-new-blink 1.2s steps(2, jump-none) infinite; }
+@keyframes resource-new-blink { 0% { opacity: 1; } 100% { opacity: .15; } }
+@media (prefers-reduced-motion: reduce) { .class-resource-new > span { animation: none; } }
