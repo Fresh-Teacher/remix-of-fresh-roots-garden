@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { LibraryShell } from '@/components/library-shell';
-import { APP_APK_URL, APP_STORE_URL, PLAY_STORE_URL } from '@/components/navigation/install-card';
+import { APP_APK_URL, APP_STORE_URL, PLAY_STORE_URL, LibraryShare } from '@/components/navigation/install-card';
 
 const routerMock = vi.hoisted(() => ({ navigate: vi.fn(), history: { back: vi.fn() } }));
 const location = vi.hoisted(() => ({ pathname: '/' }));
