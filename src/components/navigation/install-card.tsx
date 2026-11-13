@@ -1,5 +1,9 @@
 import { memo, useEffect, useRef, useState } from 'react';
 import { Check, LoaderCircle, Share2, X } from 'lucide-react';
+import { toast } from 'sonner';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { ShareMenuItems } from '@/components/document-actions';
+import '@/styles/library-share.css';
 import { Button } from '@/components/ui/button';
 import installCardMascot from '@/assets/install-card-mascot.webp.asset.json';
 import googlePlayBadge from '@/assets/google-play-badge.webp';
@@ -17,14 +21,13 @@ function AndroidIcon() {
 export const InstallCard = memo(function InstallCard({ open, onClose }: { open: boolean; onClose: () => void }) {
   const dialogRef = useRef<HTMLDivElement>(null);
   const [apkState, setApkState] = useState<'idle' | 'loading' | 'done' | 'error'>('idle');
-  const [shareState, setShareState] = useState<'idle' | 'copied' | 'error'>('idle');
 
   useEffect(() => {
     if (!open) return;
     const previous = document.activeElement;
     dialogRef.current?.querySelector<HTMLButtonElement>('button')?.focus();
     const close = (event: MouseEvent) => {
-      if (event.target instanceof Element && !event.target.closest('.library-appbar-actions')) onClose();
+      if (event.target instanceof Element && !event.target.closest('.library-appbar-actions, .library-share-popup')) onClose();
     };
     const onKey = (event: KeyboardEvent) => {
       if (event.key === 'Escape') { event.preventDefault(); onClose(); }
@@ -57,19 +60,6 @@ export const InstallCard = memo(function InstallCard({ open, onClose }: { open: 
     } catch { setApkState('error'); }
   };
 
-  const shareLibrary = async () => {
-    setShareState('idle');
-    const title = 'Fresh Teacher’s Library';
-    const text = 'Hello, I have discovered these useful teaching and learning resources from Fresh Teacher’s Library.\n\nFollow this link to check it out:';
-    const url = new URL('/', window.location.origin).href;
-    if (navigator.share) {
-      try { await navigator.share({ title, text, url }); return; }
-      catch (error) { if (typeof error === 'object' && error !== null && 'name' in error && error.name === 'AbortError') return; }
-    }
-    try { await navigator.clipboard.writeText(`${text}\n${url}`); setShareState('copied'); }
-    catch { setShareState('error'); }
-  };
-
   return <div className="library-profile library-install-card" role="dialog" aria-label="Install the app" aria-describedby="library-install-description" ref={dialogRef}>
     <Button variant="source" size="source" className="library-profile-close" aria-label="Close install card" onClick={onClose}><X /></Button>
     <div className="library-install-head">
@@ -96,10 +86,31 @@ export const InstallCard = memo(function InstallCard({ open, onClose }: { open: 
         <img src={appStoreBadge} alt="Download on the App Store" />
       </a>
     </div>
-    <Button variant="source" size="source" className="library-install-btn library-share-btn" onClick={() => void shareLibrary()}>
-      <Share2 aria-hidden /><span>Share the Fresh Teacher’s Library</span>
-    </Button>
-    {shareState === 'copied' && <p role="status" className="library-share-status">Message and library link copied.</p>}
-    {shareState === 'error' && <p role="alert" className="library-share-status">Could not share the library. Please try again.</p>}
+    <LibraryShare />
   </div>;
 });
+
+const LIBRARY_TITLE = 'Fresh Teacher’s Library';
+export const LIBRARY_SHARE_INTRODUCTION = 'Hello, visit Fresh Teacher’s Library to access thousands of free educational materials like Lesson Notes, Schemes of Work, Past Papers, Holiday Packages and many other educational materials.\n\nFollow this link to visit it now:';
+
+export function LibraryShare() {
+  const [open, setOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const link = () => new URL('/', window.location.origin).href;
+  const message = () => `${LIBRARY_SHARE_INTRODUCTION}\n${link()}`;
+  const copy = async () => {
+    try { await navigator.clipboard.writeText(message()); setCopied(true); toast.success('Message and link copied'); window.setTimeout(() => setCopied(false), 2000); }
+    catch { toast.error('Could not copy message and link'); }
+  };
+  return <DropdownMenu open={open} onOpenChange={(next) => { setOpen(next); if (next) setCopied(false); }} modal={false}>
+    <DropdownMenuTrigger asChild>
+      <Button variant="source" size="source" className="library-install-btn library-share-btn">
+        <Share2 aria-hidden /><span>Share the Fresh Teacher’s Library</span>
+      </Button>
+    </DropdownMenuTrigger>
+    <DropdownMenuContent side="bottom" align="center" collisionPadding={12} sideOffset={8} aria-label={`Share ${LIBRARY_TITLE}`} className="dg-share-popup library-share-popup">
+      <div className="dg-share-head"><span>Share</span><button type="button" className="dg-share-close" aria-label="Close share menu" onClick={() => setOpen(false)}><X size={20} /></button></div>
+      <ShareMenuItems copied={copied} copy={copy} subject={LIBRARY_TITLE} introduction={LIBRARY_SHARE_INTRODUCTION} message={message} link={link} />
+    </DropdownMenuContent>
+  </DropdownMenu>;
+}
