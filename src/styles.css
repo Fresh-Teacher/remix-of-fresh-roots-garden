@@ -828,3 +828,8 @@ a, button, [role="button"], summary, label { touch-action: manipulation; -webkit
 .qs-dialog .qs-all { display: flex; flex: none; justify-content: space-between; min-height: 52px; padding: 12px 20px; border-top: 1px solid var(--input); border-radius: 0; background: var(--background); color: var(--primary); font-size: 14px; white-space: normal; text-align: left; }
 .qs-all:hover { background: var(--muted); }
 @media (max-width: 767px) { .qs-dialog { top: max(12px, env(safe-area-inset-top)); width: calc(100vw - 24px); max-height: calc(100dvh - 24px); } }
+
+/* Lightweight nudge: the install arrow points down (transform-only, GPU-friendly). */
+.library-install-control svg { animation: appbar-arrow-point 1.8s ease-in-out infinite; will-change: transform; }
+@keyframes appbar-arrow-point { 0%, 55%, 100% { transform: translateY(0); } 25% { transform: translateY(3px); } 40% { transform: translateY(-1px); } }
+@media (prefers-reduced-motion: reduce) { .library-install-control svg { animation: none; } }
