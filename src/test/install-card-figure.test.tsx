@@ -103,7 +103,7 @@ describe('Install card library sharing', () => {
 
   it('opens the same share options as the document page', async () => {
     await openMenu();
-    for (const name of ['Copy message & link', 'WhatsApp', 'Gmail / Email', 'Facebook', 'X', 'Telegram']) expect(screen.getByRole('menuitem', { name })).toBeInTheDocument();
+    for (const name of ['Share link', 'WhatsApp', 'Gmail / Email', 'Facebook', 'X', 'Telegram']) expect(screen.getByRole('menuitem', { name })).toBeInTheDocument();
   });
 
   it('shares the library invitation with the homepage link on WhatsApp', async () => {

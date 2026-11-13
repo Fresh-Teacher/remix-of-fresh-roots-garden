@@ -99,7 +99,7 @@ export function LibraryShare() {
   const link = () => new URL('/', window.location.origin).href;
   const message = () => `${LIBRARY_SHARE_INTRODUCTION}\n${link()}`;
   const copy = async () => {
-    try { await navigator.clipboard.writeText(message()); setCopied(true); toast.success('Message and link copied'); window.setTimeout(() => setCopied(false), 2000); }
+    try { await navigator.clipboard.writeText(message()); setCopied(true); toast.success('Link copied'); window.setTimeout(() => setCopied(false), 2000); }
     catch { toast.error('Could not copy message and link'); }
   };
   return <DropdownMenu open={open} onOpenChange={(next) => { setOpen(next); if (next) setCopied(false); }} modal={false}>
