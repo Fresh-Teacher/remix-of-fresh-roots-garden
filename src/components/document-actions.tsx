@@ -9,7 +9,7 @@ import { resourceTitle, type ResourceRecord } from '@/lib/resources';
 import { documentSlug } from '@/lib/document-metadata';
 import { classMenuAnimations } from '@/lib/class-hubs';
 
-const shareAnimations = [...new Set(Object.values(classMenuAnimations))];
+export const shareAnimations = [...new Set(Object.values(classMenuAnimations))];
 
 // Official WhatsApp glyph in its brand green.
 function WhatsAppIcon() {
@@ -29,6 +29,19 @@ function XIcon() {
 }
 function TelegramIcon() {
   return <svg width={16} height={16} viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#26A5E4"/><path fill="#fff" d="M5.43 11.87c3.5-1.52 5.83-2.53 7-3.02 3.33-1.39 4.02-1.63 4.48-1.64.1 0 .32.02.46.14.12.1.15.23.17.33.02.09.04.3.02.47-.18 1.9-.96 6.52-1.36 8.65-.17.9-.5 1.2-.82 1.23-.7.06-1.22-.46-1.9-.9-1.05-.69-1.64-1.12-2.66-1.79-1.18-.78-.41-1.2.26-1.9.18-.18 3.23-2.96 3.29-3.21 0-.03.01-.15-.06-.21s-.17-.04-.25-.02c-.1.02-1.79 1.14-5.06 3.35-.48.33-.91.49-1.3.48-.43-.01-1.25-.24-1.86-.44-.75-.24-1.35-.37-1.3-.79.03-.22.33-.44.89-.67z"/></svg>;
+}
+
+export function ShareMenuItems({ copied, copy, subject, introduction, message, link }: { copied: boolean; copy: () => Promise<void>; subject: string; introduction: string; message: () => string; link: () => string }) {
+  const open = (url: string) => window.open(url, '_blank', 'noopener,noreferrer');
+  const enc = encodeURIComponent;
+  return <>
+      <DropdownMenuItem onSelect={() => void copy()}>{copied ? <Check size={16} /> : <Link2 size={16} />} Copy message &amp; link</DropdownMenuItem>
+      <DropdownMenuItem onSelect={() => open(`https://wa.me/?text=${enc(message())}`)}><WhatsAppIcon /> WhatsApp</DropdownMenuItem>
+      <DropdownMenuItem onSelect={() => { window.location.href = `mailto:?subject=${enc(title)}&body=${enc(message())}`; }}><GmailIcon /> Gmail / Email</DropdownMenuItem>
+      <DropdownMenuItem onSelect={() => open(`https://www.facebook.com/sharer/sharer.php?u=${enc(link())}`)}><FacebookIcon /> Facebook</DropdownMenuItem>
+      <DropdownMenuItem onSelect={() => open(`https://x.com/intent/post?text=${enc(introduction)}&url=${enc(link())}`)}><XIcon /> X</DropdownMenuItem>
+      <DropdownMenuItem onSelect={() => open(`https://t.me/share/url?url=${enc(link())}&text=${enc(introduction)}`)}><TelegramIcon /> Telegram</DropdownMenuItem>
+  </>;
 }
 
 export function DocumentShare({ item }: { item: ResourceRecord }) {
@@ -57,8 +70,6 @@ export function DocumentShare({ item }: { item: ResourceRecord }) {
     if (source?.startsWith('more/')) url.searchParams.set('source', source);
     return url.href;
   };
-  const open = (url: string) => window.open(url, '_blank', 'noopener,noreferrer');
-  const enc = encodeURIComponent;
   const introduction = `Hello, I have discovered this useful resource from Fresh Teacher’s Library.\n\n${title}\n\nFollow this link to check it out:`;
   const message = () => `${introduction}\n${link()}`;
   const copy = async () => {
@@ -71,12 +82,7 @@ export function DocumentShare({ item }: { item: ResourceRecord }) {
     </DropdownMenuTrigger>
     <DropdownMenuContent align="end" collisionPadding={12} sideOffset={8} aria-label={`Share ${title}`} className={`dg-share-popup dg-share-${animation}`}>
       <div className="dg-share-head"><span>Share</span><button type="button" className="dg-share-close" aria-label="Close share menu" onClick={() => setShareOpen(false)}><X size={20} /></button></div>
-      <DropdownMenuItem onSelect={() => void copy()}>{copied ? <Check size={16} /> : <Link2 size={16} />} Copy message &amp; link</DropdownMenuItem>
-      <DropdownMenuItem onSelect={() => open(`https://wa.me/?text=${enc(message())}`)}><WhatsAppIcon /> WhatsApp</DropdownMenuItem>
-      <DropdownMenuItem onSelect={() => { window.location.href = `mailto:?subject=${enc(title)}&body=${enc(message())}`; }}><GmailIcon /> Gmail / Email</DropdownMenuItem>
-      <DropdownMenuItem onSelect={() => open(`https://www.facebook.com/sharer/sharer.php?u=${enc(link())}`)}><FacebookIcon /> Facebook</DropdownMenuItem>
-      <DropdownMenuItem onSelect={() => open(`https://x.com/intent/post?text=${enc(introduction)}&url=${enc(link())}`)}><XIcon /> X</DropdownMenuItem>
-      <DropdownMenuItem onSelect={() => open(`https://t.me/share/url?url=${enc(link())}&text=${enc(introduction)}`)}><TelegramIcon /> Telegram</DropdownMenuItem>
+      <ShareMenuItems copied={copied} copy={copy} subject={title} introduction={introduction} message={message} link={link} />
     </DropdownMenuContent>
   </DropdownMenu>;
 }
