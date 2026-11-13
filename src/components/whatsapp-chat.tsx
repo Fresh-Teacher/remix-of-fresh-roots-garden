@@ -9,8 +9,21 @@ export function WhatsAppChat() {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState('');
   const [greeting, setGreeting] = useState('');
+  const [phase, setPhase] = useState<'online' | 'typing' | 'greeting'>('greeting');
   const trigger = useRef<HTMLAnchorElement>(null);
   useEffect(() => { setGreeting(legacyGreeting(new Date().getHours())); }, []);
+  // On open: show "online", then "typing..." with the dots bubble, then the greeting pops in.
+  useEffect(() => {
+    if (!open) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setPhase('greeting');
+      return;
+    }
+    setPhase('online');
+    const typingTimer = setTimeout(() => setPhase('typing'), 1500);
+    const greetingTimer = setTimeout(() => setPhase('greeting'), 3000);
+    return () => { clearTimeout(typingTimer); clearTimeout(greetingTimer); };
+  }, [open]);
   useEffect(() => {
     const escape = (event: KeyboardEvent) => {
       if (event.key !== 'Escape' || !open) return;
@@ -32,7 +45,7 @@ export function WhatsAppChat() {
           <p>
             <span className="africavotes-name">Fresh Teacher</span>
             <br />
-            <small>online </small>
+            <small>{phase === 'typing' ? 'typing...' : 'online'} </small>
           </p>
         </div>
         <div className="get-new hide">
@@ -44,14 +57,14 @@ export function WhatsAppChat() {
       <div className="start-chat">
         <div className="africavotes-chat-body">
           <div className="dAbFpq">
-            <div className="eJJEeC" style={{ opacity: '0' }}>
+            <div className="eJJEeC" style={{ opacity: phase === 'typing' ? '1' : '0' }}>
               <div className="hFENyl">
                 <div className="ixsrax" />
                 <div className="dRvxoz" />
                 <div className="kXBtNt" />
               </div>
             </div>
-            <div className="kAZgZq" style={{ opacity: '1' }}>
+            <div className="kAZgZq" style={{ opacity: phase === 'greeting' ? '1' : '0' }}>
               <div className="iSpIQi" id="greeting">{greeting}{greeting && <> <i className={`fa-solid fa-${icon[0]}`} style={{ color: icon[1] }} aria-hidden="true" /></>}</div>
             </div>
           </div>
