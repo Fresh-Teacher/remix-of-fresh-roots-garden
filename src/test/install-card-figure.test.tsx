@@ -84,23 +84,24 @@ describe('Install card app download options', () => {
 });
 
 describe('Install card library sharing', () => {
-  const openMenu = () => {
+  const openMenu = async () => {
     openCard();
     const trigger = screen.getByRole('button', { name: 'Share the Fresh Teacher’s Library' });
-    fireEvent.pointerDown(trigger, { button: 0, ctrlKey: false, pointerType: 'mouse' });
-    return screen.getByRole('menu', { name: 'Share Fresh Teacher’s Library' });
+    fireEvent.pointerDown(trigger, { button: 0, ctrlKey: false, bubbles: true, cancelable: true });
+    fireEvent.click(trigger, { button: 0, ctrlKey: false, bubbles: true, cancelable: true });
+    return screen.findByRole('menu');
   };
   const intro = 'Hello, visit Fresh Teacher’s Library to access thousands of free educational materials like Lesson Notes, Schemes of Work, Past Papers, Holiday Packages and many other educational materials.\n\nFollow this link to visit it now:';
 
-  it('opens the same share options as the document page', () => {
-    openMenu();
+  it('opens the same share options as the document page', async () => {
+    await openMenu();
     for (const name of ['Copy message & link', 'WhatsApp', 'Gmail / Email', 'Facebook', 'X', 'Telegram']) expect(screen.getByRole('menuitem', { name })).toBeInTheDocument();
   });
 
-  it('shares the library invitation with the homepage link on WhatsApp', () => {
+  it('shares the library invitation with the homepage link on WhatsApp', async () => {
     const open = vi.spyOn(window, 'open').mockReturnValue(null);
     window.history.replaceState({}, '', '/doc/example');
-    openMenu();
+    await openMenu();
     fireEvent.click(screen.getByRole('menuitem', { name: 'WhatsApp' }));
     const shared = new URL(String(open.mock.calls[0]?.[0]));
     expect(shared.searchParams.get('text')).toBe(`${intro}\n${window.location.origin}/`);
