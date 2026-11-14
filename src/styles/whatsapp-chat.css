@@ -57,7 +57,7 @@
 .whatsapp-chat .dAbFpq { flex-direction: column; align-items: flex-start; }
 .whatsapp-chat .dAbFpq .kAZgZq { margin-left: 10px; }
 /* End-to-end encryption notice bubble, styled like WhatsApp's. */
-.whatsapp-chat .encryption-notice { align-self: center; display: flex; gap: 6px; align-items: flex-start; background-color: #fdf3c6; color: #54656f; font-size: 12px; line-height: 16px; border-radius: 8px; padding: 6px 10px; margin: 6px 12px 8px; box-shadow: rgba(0, 0, 0, 0.13) 0px 1px 0.5px; text-align: center; }
+.whatsapp-chat .encryption-notice { position: relative; z-index: 1; align-self: center; display: flex; gap: 6px; align-items: flex-start; background-color: #fdf3c6; color: #54656f; font-size: 12px; line-height: 16px; border-radius: 8px; padding: 6px 10px; margin: 6px 12px 8px; box-shadow: rgba(0, 0, 0, 0.13) 0px 1px 0.5px; text-align: center; }
 .whatsapp-chat .encryption-notice .fa-lock { margin-top: 1px; font-size: 11px; }
 .whatsapp-chat .encryption-learn-more { background: none; border: none; padding: 0; font: inherit; font-weight: 600; color: #54656f; cursor: pointer; }
 .whatsapp-chat .encryption-learn-more:hover { text-decoration: underline; }
