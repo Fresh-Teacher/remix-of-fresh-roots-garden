@@ -10,6 +10,7 @@ export function WhatsAppChat() {
   const [message, setMessage] = useState('');
   const [greeting, setGreeting] = useState('');
   const [phase, setPhase] = useState<'online' | 'typing' | 'greeting' | 'pause' | 'typing2' | 'done'>('done');
+  const [showEncryptionInfo, setShowEncryptionInfo] = useState(false);
   const trigger = useRef<HTMLAnchorElement>(null);
   useEffect(() => { setGreeting(legacyGreeting(new Date().getHours())); }, []);
   // On open: "online" → "typing..." → greeting pops in → brief "online" →
@@ -62,6 +63,10 @@ export function WhatsAppChat() {
       <div className="home-chat" />
       <div className="start-chat">
         <div className="africavotes-chat-body">
+          <div className="encryption-notice">
+            <i className="fa-solid fa-lock" aria-hidden="true" />
+            <span>Messages and calls are end-to-end encrypted. Only people in this chat can read, listen to, or share them. <button type="button" className="encryption-learn-more" onClick={() => setShowEncryptionInfo(true)}>Learn more</button></span>
+          </div>
           <div className="dAbFpq">
             <div className="eJJEeC" style={{ opacity: phase === 'typing' || phase === 'typing2' ? '1' : '0' }}>
               <div className="hFENyl">
@@ -87,6 +92,44 @@ export function WhatsAppChat() {
       </div>
       <div id="get-number" />
       <a className="close-chat" href="#" role="button" aria-label="Close chat" onClick={event => { event.preventDefault(); setOpen(false); trigger.current?.focus(); }}>×</a>
+      {showEncryptionInfo && (
+        <div className="encryption-modal" role="dialog" aria-modal="true" aria-label="About end-to-end encryption">
+          <button type="button" className="encryption-modal-close" aria-label="Close" onClick={() => setShowEncryptionInfo(false)}>×</button>
+          <div className="encryption-modal-scroll">
+            <svg className="encryption-illustration" viewBox="0 0 200 150" aria-hidden="true">
+              <rect x="20" y="25" width="110" height="95" rx="12" fill="#25d366" stroke="#075e54" strokeWidth="4" />
+              <rect x="30" y="35" width="90" height="75" rx="8" fill="#1eb85a" />
+              <circle cx="75" cy="72" r="26" fill="#0b3d2e" />
+              <circle cx="75" cy="72" r="20" fill="#25d366" />
+              <circle cx="75" cy="72" r="7" fill="#0b3d2e" />
+              <g stroke="#0b3d2e" strokeWidth="3">
+                <line x1="75" y1="54" x2="75" y2="62" />
+                <line x1="75" y1="82" x2="75" y2="90" />
+                <line x1="57" y1="72" x2="65" y2="72" />
+                <line x1="85" y1="72" x2="93" y2="72" />
+              </g>
+              <rect x="14" y="40" width="8" height="14" rx="3" fill="#075e54" />
+              <rect x="14" y="90" width="8" height="14" rx="3" fill="#075e54" />
+              <rect x="34" y="120" width="12" height="10" rx="2" fill="#075e54" />
+              <rect x="104" y="120" width="12" height="10" rx="2" fill="#075e54" />
+              <path d="M140 60 a22 22 0 0 1 44 0 v12 h-10 v-12 a12 12 0 0 0 -24 0 v12 h-10 z" fill="#f7e9d0" stroke="#075e54" strokeWidth="3" />
+              <rect x="132" y="70" width="60" height="52" rx="10" fill="#f7e9d0" stroke="#075e54" strokeWidth="3" />
+              <circle cx="162" cy="90" r="8" fill="#075e54" />
+              <rect x="159" y="94" width="6" height="14" rx="3" fill="#075e54" />
+            </svg>
+            <h3>Your chats and calls are private</h3>
+            <p>End-to-end encryption keeps your personal messages and calls between you and the people you choose. No one outside of the chat, not even WhatsApp, can read, listen to, or share them. This includes your:</p>
+            <ul>
+              <li><i className="fa-solid fa-message" aria-hidden="true" /> Text and voice messages</li>
+              <li><i className="fa-solid fa-phone" aria-hidden="true" /> Audio and video calls</li>
+              <li><i className="fa-solid fa-paperclip" aria-hidden="true" /> Photos, videos and documents</li>
+              <li><i className="fa-solid fa-location-dot" aria-hidden="true" /> Location sharing</li>
+              <li><i className="fa-solid fa-arrows-rotate" aria-hidden="true" /> Status updates</li>
+            </ul>
+            <a className="encryption-modal-link" href="https://www.whatsapp.com/security" target="_blank" rel="noopener noreferrer">Learn more</a>
+          </div>
+        </div>
+      )}
     </div>
     <a className="africaVotesChat" title="WhatsApp" href="#" role="button" aria-label="Show Chat" aria-expanded={open} ref={trigger} onClick={event => { event.preventDefault(); setOpen(value => !value); }}>
       <svg width="26" viewBox="0 0 24 24" aria-hidden="true">
