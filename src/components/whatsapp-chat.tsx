@@ -10,6 +10,7 @@ export function WhatsAppChat() {
   const [message, setMessage] = useState('');
   const [greeting, setGreeting] = useState('');
   const [phase, setPhase] = useState<'online' | 'typing' | 'greeting' | 'pause' | 'typing2' | 'done'>('done');
+  const [showEncryptionInfo, setShowEncryptionInfo] = useState(false);
   const trigger = useRef<HTMLAnchorElement>(null);
   useEffect(() => { setGreeting(legacyGreeting(new Date().getHours())); }, []);
   // On open: "online" → "typing..." → greeting pops in → brief "online" →
@@ -62,6 +63,10 @@ export function WhatsAppChat() {
       <div className="home-chat" />
       <div className="start-chat">
         <div className="africavotes-chat-body">
+          <div className="encryption-notice">
+            <i className="fa-solid fa-lock" aria-hidden="true" />
+            <span>Messages and calls are end-to-end encrypted. Only people in this chat can read, listen to, or share them. <button type="button" className="encryption-learn-more" onClick={() => setShowEncryptionInfo(true)}>Learn more</button></span>
+          </div>
           <div className="dAbFpq">
             <div className="eJJEeC" style={{ opacity: phase === 'typing' || phase === 'typing2' ? '1' : '0' }}>
               <div className="hFENyl">
