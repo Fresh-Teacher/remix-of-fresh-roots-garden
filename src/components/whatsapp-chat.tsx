@@ -9,20 +9,26 @@ export function WhatsAppChat() {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState('');
   const [greeting, setGreeting] = useState('');
-  const [phase, setPhase] = useState<'online' | 'typing' | 'greeting'>('greeting');
+  const [phase, setPhase] = useState<'online' | 'typing' | 'greeting' | 'pause' | 'typing2' | 'done'>('done');
   const trigger = useRef<HTMLAnchorElement>(null);
   useEffect(() => { setGreeting(legacyGreeting(new Date().getHours())); }, []);
-  // On open: show "online", then "typing..." with the dots bubble, then the greeting pops in.
+  // On open: "online" → "typing..." → greeting pops in → brief "online" →
+  // "typing..." again → the follow-up question pops in and status stays "online".
   useEffect(() => {
     if (!open) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      setPhase('greeting');
+      setPhase('done');
       return;
     }
     setPhase('online');
-    const typingTimer = setTimeout(() => setPhase('typing'), 1500);
-    const greetingTimer = setTimeout(() => setPhase('greeting'), 3000);
-    return () => { clearTimeout(typingTimer); clearTimeout(greetingTimer); };
+    const timers = [
+      setTimeout(() => setPhase('typing'), 1500),
+      setTimeout(() => setPhase('greeting'), 3000),
+      setTimeout(() => setPhase('pause'), 4500),
+      setTimeout(() => setPhase('typing2'), 6000),
+      setTimeout(() => setPhase('done'), 7500),
+    ];
+    return () => timers.forEach(clearTimeout);
   }, [open]);
   useEffect(() => {
     const escape = (event: KeyboardEvent) => {
@@ -45,7 +51,7 @@ export function WhatsAppChat() {
           <p>
             <span className="africavotes-name">Fresh Teacher</span>
             <br />
-            <small>{phase === 'typing' ? 'typing...' : 'online'} </small>
+            <small>{phase === 'typing' || phase === 'typing2' ? 'typing...' : 'online'} </small>
           </p>
         </div>
         <div className="get-new hide">
@@ -57,15 +63,18 @@ export function WhatsAppChat() {
       <div className="start-chat">
         <div className="africavotes-chat-body">
           <div className="dAbFpq">
-            <div className="eJJEeC" style={{ opacity: phase === 'typing' ? '1' : '0' }}>
+            <div className="eJJEeC" style={{ opacity: phase === 'typing' || phase === 'typing2' ? '1' : '0' }}>
               <div className="hFENyl">
                 <div className="ixsrax" />
                 <div className="dRvxoz" />
                 <div className="kXBtNt" />
               </div>
             </div>
-            <div className="kAZgZq" style={{ opacity: phase === 'greeting' ? '1' : '0' }}>
+            <div className="kAZgZq" style={{ opacity: phase === 'greeting' || phase === 'pause' || phase === 'typing2' || phase === 'done' ? '1' : '0' }}>
               <div className="iSpIQi" id="greeting">{greeting}{greeting && <> <i className={`fa-solid fa-${icon[0]}`} style={{ color: icon[1] }} aria-hidden="true" /></>}</div>
+            </div>
+            <div className="kAZgZq" style={{ opacity: phase === 'done' ? '1' : '0' }}>
+              <div className="iSpIQi">How may I help you?</div>
             </div>
           </div>
         </div>

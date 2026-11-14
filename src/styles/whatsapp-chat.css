@@ -53,3 +53,6 @@
 @media (prefers-reduced-motion: reduce) {
   .whatsapp-chat a.africaVotesChat::before, .whatsapp-chat a.africaVotesChat::after { animation: none; }
 }
+/* Stack the greeting and follow-up messages vertically like a real chat. */
+.whatsapp-chat .dAbFpq { flex-direction: column; align-items: flex-start; }
+.whatsapp-chat .dAbFpq .kAZgZq { margin-left: 10px; }
