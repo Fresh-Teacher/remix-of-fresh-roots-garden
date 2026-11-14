@@ -68,7 +68,7 @@ export function WhatsAppChat() {
             <span>Messages and calls are end-to-end encrypted. Only people in this chat can read, listen to, or share them. <button type="button" className="encryption-learn-more" onClick={() => setShowEncryptionInfo(true)}>Learn more</button></span>
           </div>
           <div className="dAbFpq">
-            <div className="eJJEeC" style={{ display: phase === 'typing' ? 'block' : 'none' }}>
+            <div className="eJJEeC" style={{ display: phase === 'typing' ? 'flex' : 'none', opacity: phase === 'typing' ? 1 : 0 }}>
               <div className="hFENyl">
                 <div className="ixsrax" />
                 <div className="dRvxoz" />
@@ -78,7 +78,7 @@ export function WhatsAppChat() {
             <div className="kAZgZq" style={{ opacity: phase === 'greeting' || phase === 'pause' || phase === 'typing2' || phase === 'done' ? '1' : '0' }}>
               <div className="iSpIQi" id="greeting">{greeting}{greeting && <> <i className={`fa-solid fa-${icon[0]}`} style={{ color: icon[1] }} aria-hidden="true" /></>}</div>
             </div>
-            <div className="eJJEeC" style={{ display: phase === 'typing2' ? 'block' : 'none' }}>
+            <div className="eJJEeC" style={{ display: phase === 'typing2' ? 'flex' : 'none', opacity: phase === 'typing2' ? 1 : 0 }}>
               <div className="hFENyl">
                 <div className="ixsrax" />
                 <div className="dRvxoz" />
