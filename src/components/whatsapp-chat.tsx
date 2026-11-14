@@ -9,20 +9,26 @@ export function WhatsAppChat() {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState('');
   const [greeting, setGreeting] = useState('');
-  const [phase, setPhase] = useState<'online' | 'typing' | 'greeting'>('greeting');
+  const [phase, setPhase] = useState<'online' | 'typing' | 'greeting' | 'pause' | 'typing2' | 'done'>('done');
   const trigger = useRef<HTMLAnchorElement>(null);
   useEffect(() => { setGreeting(legacyGreeting(new Date().getHours())); }, []);
-  // On open: show "online", then "typing..." with the dots bubble, then the greeting pops in.
+  // On open: "online" → "typing..." → greeting pops in → brief "online" →
+  // "typing..." again → the follow-up question pops in and status stays "online".
   useEffect(() => {
     if (!open) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      setPhase('greeting');
+      setPhase('done');
       return;
     }
     setPhase('online');
-    const typingTimer = setTimeout(() => setPhase('typing'), 1500);
-    const greetingTimer = setTimeout(() => setPhase('greeting'), 3000);
-    return () => { clearTimeout(typingTimer); clearTimeout(greetingTimer); };
+    const timers = [
+      setTimeout(() => setPhase('typing'), 1500),
+      setTimeout(() => setPhase('greeting'), 3000),
+      setTimeout(() => setPhase('pause'), 4500),
+      setTimeout(() => setPhase('typing2'), 6000),
+      setTimeout(() => setPhase('done'), 7500),
+    ];
+    return () => timers.forEach(clearTimeout);
   }, [open]);
   useEffect(() => {
     const escape = (event: KeyboardEvent) => {
